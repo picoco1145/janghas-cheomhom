@@ -2562,18 +2562,15 @@
     const el = document.getElementById(docId);
     if (!el) return;
     const content = el.innerHTML;
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-<head><meta charset='utf-8'><style>
-body{font-family:'맑은 고딕',sans-serif;font-size:12pt;line-height:2;margin:40pt 50pt;}
-table{border-collapse:collapse;width:100%;}
-td,th{border:1px solid #999;padding:6pt 10pt;font-size:11pt;}
-p{margin:0 0 6pt;}
-</style></head><body>${content}</body></html>`;
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:'맑은 고딕',sans-serif;font-size:12pt;line-height:2;margin:40pt 50pt;}table{border-collapse:collapse;width:100%;}td,th{border:1px solid #999;padding:6pt 10pt;font-size:11pt;}p{margin:0 0 6pt;}</style></head><body>${content}</body></html>`;
     const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = filename; a.click();
-    URL.revokeObjectURL(url);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
   }
 
   function showGroup(target, scrollTo) {
