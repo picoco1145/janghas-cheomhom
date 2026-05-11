@@ -1819,7 +1819,9 @@
     <h3 style="font-size:16px;font-weight:600;margin:32px 0 6px;color:var(--color-text);">금전소비대차계약서 (안)</h3>
     <p style="font-size:13px;color:var(--color-text-muted);margin-bottom:16px;">A안 STEP 2 — 이사장→조합 1억원 / 부모→조합 1억원, 총 2건 작성. 아래 서식을 건별로 사용.</p>
 
-    <div style="border:1.5px solid var(--color-border);border-radius:8px;padding:32px 36px;background:#fff;font-size:13.5px;line-height:2;color:var(--color-text);max-width:720px;">
+    <button onclick="downloadWord('doc-loan-contract','금전소비대차계약서.doc')" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:7px 16px;background:var(--color-primary);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;">⬇ Word 다운로드</button>
+
+    <div id="doc-loan-contract" style="border:1.5px solid var(--color-border);border-radius:8px;padding:32px 36px;background:#fff;font-size:13.5px;line-height:2;color:var(--color-text);max-width:720px;">
 
       <p style="text-align:center;font-size:18px;font-weight:700;letter-spacing:0.12em;margin:0 0 28px;">금 전 소 비 대 차 계 약 서</p>
 
@@ -1909,7 +1911,9 @@
     <h3 style="font-size:16px;font-weight:600;margin:32px 0 6px;color:var(--color-text);">이사회 의사록 (안)</h3>
     <p style="font-size:13px;color:var(--color-text-muted);margin-bottom:16px;">금전소비대차계약 체결 전 이사회 의결 필수 (협동조합기본법 제37조). 아래 서식을 사용.</p>
 
-    <div style="border:1.5px solid var(--color-border);border-radius:8px;padding:32px 36px;background:#fff;font-size:13.5px;line-height:2;color:var(--color-text);max-width:720px;">
+    <button onclick="downloadWord('doc-board-minutes','이사회의사록.doc')" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:7px 16px;background:var(--color-primary);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;">⬇ Word 다운로드</button>
+
+    <div id="doc-board-minutes" style="border:1.5px solid var(--color-border);border-radius:8px;padding:32px 36px;background:#fff;font-size:13.5px;line-height:2;color:var(--color-text);max-width:720px;">
 
       <p style="text-align:center;font-size:18px;font-weight:700;letter-spacing:0.12em;margin:0 0 6px;">이 사 회 의 사 록</p>
       <p style="text-align:center;font-size:13px;color:var(--color-text-muted);margin-bottom:28px;">장하세사회적협동조합</p>
@@ -2553,6 +2557,24 @@
   const sideNav = document.getElementById('sideNav');
   const mobileLabel = document.getElementById('mobileCurrentLabel');
 
+
+  function downloadWord(docId, filename) {
+    const el = document.getElementById(docId);
+    if (!el) return;
+    const content = el.innerHTML;
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset='utf-8'><style>
+body{font-family:'맑은 고딕',sans-serif;font-size:12pt;line-height:2;margin:40pt 50pt;}
+table{border-collapse:collapse;width:100%;}
+td,th{border:1px solid #999;padding:6pt 10pt;font-size:11pt;}
+p{margin:0 0 6pt;}
+</style></head><body>${content}</body></html>`;
+    const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename; a.click();
+    URL.revokeObjectURL(url);
+  }
 
   function showGroup(target, scrollTo) {
     groups.forEach(g => g.classList.remove('active'));
