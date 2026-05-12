@@ -2542,6 +2542,22 @@
 </footer>
 
 <script>
+// ── Word 다운로드 (전역 함수 — onclick 속성에서 호출) ──
+function downloadWord(docId, filename) {
+  const el = document.getElementById(docId);
+  if (!el) return;
+  const content = el.innerHTML;
+  const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:'맑은 고딕',sans-serif;font-size:12pt;line-height:2;margin:40pt 50pt;}table{border-collapse:collapse;width:100%;}td,th{border:1px solid #999;padding:6pt 10pt;font-size:11pt;}p{margin:0 0 6pt;}</style></head><body>${content}</body></html>`;
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+}
+
 // ── Sidebar navigation ──
 (function() {
   const links = document.querySelectorAll('.side-nav-link');
@@ -2549,22 +2565,6 @@
   const navToggle = document.getElementById('navToggle');
   const sideNav = document.getElementById('sideNav');
   const mobileLabel = document.getElementById('mobileCurrentLabel');
-
-
-  function downloadWord(docId, filename) {
-    const el = document.getElementById(docId);
-    if (!el) return;
-    const content = el.innerHTML;
-    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:'맑은 고딕',sans-serif;font-size:12pt;line-height:2;margin:40pt 50pt;}table{border-collapse:collapse;width:100%;}td,th{border:1px solid #999;padding:6pt 10pt;font-size:11pt;}p{margin:0 0 6pt;}</style></head><body>${content}</body></html>`;
-    const blob = new Blob(['\ufeff', html], { type: 'application/octet-stream' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
-  }
 
   function showGroup(target, scrollTo) {
     groups.forEach(g => g.classList.remove('active'));
